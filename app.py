@@ -44,9 +44,9 @@ def setup_chinese_font():
 def load_base_data():
     try:
         try:
-            df = pd.read_csv('排樁座標.csv', encoding='utf-8')
+            df = pd.read_csv('排樁座標(CCP).csv', encoding='utf-8')
         except:
-            df = pd.read_csv('排樁座標.csv', encoding='big5')
+            df = pd.read_csv('排樁座標(CCP).csv', encoding='big5')
         x_col = next((c for c in df.columns if 'X' in c.upper() or '座標' in c), None)
         y_col = next((c for c in df.columns if 'Y' in c.upper() or '座標' in c), None)
         text_col = next((c for c in df.columns if '內容' in c or '值' in c or '樁號' in c), None)

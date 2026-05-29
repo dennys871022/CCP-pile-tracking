@@ -70,7 +70,7 @@ def get_gs_connection():
         creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
         client = gspread.authorize(creds)
         ss = client.open_by_url(st.secrets["sheet_url"])
-        sh_main = ss.worksheet("施工明細")
+        sh_main = ss.worksheet("CCP施工明細")
         return ss, sh_main
     except Exception as e:
         st.error(f"雲端連線異常: {e}")
@@ -90,7 +90,7 @@ def load_settings(ss):
     }
     if ss is None: return default_settings
     try:
-        sh = ss.worksheet("系統設定")
+        sh = ss.worksheet("CCP系統設定")
         records = sh.get_all_records()
         loaded = {}
         for r in records:

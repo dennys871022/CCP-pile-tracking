@@ -110,7 +110,7 @@ def load_settings(ss):
 def save_settings(ss, settings_dict):
     if ss is None: return
     try:
-        sh = ss.worksheet("系統設定")
+        sh = ss.worksheet("CCP系統設定")
         sh.clear()
         out = [['Key', 'Value']]
         for k, v in settings_dict.items(): out.append([k, str(v)])

@@ -15,8 +15,8 @@ try:
 except ImportError:
     MATPLOTLIB_READY = False
 
-st.set_page_config(page_title="CDC CCP進度管理", layout="wide")
-st.title("🏗️ CDC CCP進度管理 ")
+st.set_page_config(page_title="CCP 進度管理系統 V1", layout="wide")
+st.title("🏗️ CCP 進度管理系統")
 
 if 'sel_a' not in st.session_state:
     st.session_state.sel_a = []
@@ -143,7 +143,7 @@ if "pdf_week_est" not in st.session_state:
 df_history = fetch_current_data(sh_main)
 
 total_done_auto = len(df_history)
-total_perc = (total_done_auto / 613) * 100 if 613 > 0 else 0
+total_perc = (total_done_auto / 499) * 100 if 499 > 0 else 0
 today_done_auto_a = 0
 today_done_auto_b = 0
 cum_done_a = 0
@@ -241,12 +241,12 @@ def process_and_save(plist):
 t1, t2 = st.tabs(["🎯 推算", "✏️ 手動"])
 with t1:
     with st.form("a"):
-        cc1, cc2, cc3 = st.columns(3); sp = cc1.number_input("起始 P", 1, 613, 1)
+        cc1, cc2, cc3 = st.columns(3); sp = cc1.number_input("起始 P", 1, 499, 1)
         dr = cc2.radio("方向", ["遞增", "遞減"]); ct = cc3.number_input("數量", 1, 100, 10)
         if st.form_submit_button("執行登錄"):
             plist = []; cur = sp
             for _ in range(int(ct)):
-                if 1 <= cur <= 613: plist.append(f"P{cur}")
+                if 1 <= cur <= 499: plist.append(f"P{cur}")
                 cur = cur + step if dr == "遞增" else cur - step
             process_and_save(plist)
 with t2:
@@ -368,7 +368,6 @@ if not df_history.empty:
         }
         save_settings(ss, new_s); st.session_state.ui_settings = new_s; st.sidebar.success("✅ 設定已寫入雲端永久記憶")
 
-    # 【新增功能】：Excel 備份還原上傳區
     st.sidebar.markdown("### 📤 備份還原區")
     excel_backup = st.sidebar.file_uploader("上傳 Excel 備份檔以覆蓋雲端", type=["xlsx"])
     if excel_backup is not None:
@@ -483,7 +482,7 @@ if not df_history.empty:
                 f"本日完成 A機:{today_done_auto_a}支 B機:{today_done_auto_b}支",
                 f"選取區 A機:{local_a_done}/{local_a_total}{a_pct_str}",
                 f"　　　 B機:{local_b_done}/{local_b_total}{b_pct_str}",
-                f"總累積完成 {total_done_auto} 支 ({total_done_auto}/613, {total_perc:.2f}%)",
+                f"總累積完成 {total_done_auto} 支 ({total_done_auto}/499, {total_perc:.2f}%)",
                 f"各別累積 A機:{cum_done_a}支 B機:{cum_done_b}支"
             ]
             fig.text(0.05, pos_title_y, f"{today_roc} 施作進度回報", fontsize=50 * fig_scale, fontweight='bold')

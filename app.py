@@ -53,7 +53,7 @@ def load_base_data():
         df['樁號'] = df[text_col].apply(lambda x: re.sub(r'\\[^;]+;|[{}]', '', str(x)).strip().upper())
         df = df[df['樁號'].str.match(r'^P\d+$')]
         df['數字'] = df['樁號'].str.extract(r'(\d+)').astype(int)
-        df = df[(df['數字'] >= 1) & (df['數字'] <= 613)]
+        df = df[(df['數字'] >= 1) & (df['數字'] <= 499)]
         df['X'] = pd.to_numeric(df[x_col], errors='coerce')
         df['Y'] = pd.to_numeric(df[y_col], errors='coerce')
         return df.drop_duplicates(subset=['樁號']).dropna(subset=['X', 'Y']).sort_values('數字')

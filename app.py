@@ -373,7 +373,7 @@ if not df_history.empty:
     excel_backup = st.sidebar.file_uploader("上傳 Excel 備份檔以覆蓋雲端", type=["xlsx"])
     if excel_backup is not None:
         try:
-            df_bk = pd.read_excel(excel_backup, sheet_name='施工明細')
+            df_bk = pd.read_excel(excel_backup, sheet_name='CCP施工明細')
             if st.sidebar.button("⚠️ 確認覆蓋雲端資料庫", type="secondary"):
                 if sh_main is not None:
                     sh_main.clear()
@@ -502,7 +502,7 @@ if not df_history.empty:
     def xl_gen(h_df, p_df):
         out = io.BytesIO()
         with pd.ExcelWriter(out, engine='xlsxwriter') as wr:
-            h_df.to_excel(wr, sheet_name='施工明細', index=False); wb = wr.book; ws = wb.add_worksheet('全區進度圖'); ch = wb.add_chart({'type': 'scatter'})
+            h_df.to_excel(wr, sheet_name='CCP施工明細', index=False); wb = wr.book; ws = wb.add_worksheet('全區進度圖'); ch = wb.add_chart({'type': 'scatter'})
             col = 10; states = ['未完成', '[已完成]'] + sorted([s for s in p_df['狀態'].unique() if s not in ['未完成', '[已完成]']])
             colors = {'未完成': '#696969', '[已完成]': '#FFB6C1'}; pal = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd', '#8c564b', '#e377c2']; ci = 0
             for s in states:

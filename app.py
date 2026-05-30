@@ -15,8 +15,8 @@ try:
 except ImportError:
     MATPLOTLIB_READY = False
 
-st.set_page_config(page_title="CCP CCP進度管理系統 V1", layout="wide")
-st.title("🏗️ CCP CCP進度管理系統")
+st.set_page_config(page_title="CCP 進度管理系統 ", layout="wide")
+st.title("🏗️ CCP CCP進度管理系統 ")
 
 if 'sel_a' not in st.session_state:
     st.session_state.sel_a = []
@@ -211,7 +211,8 @@ local_b_done, local_b_total = get_local_stats(st.session_state.sel_b, df_p)
 st.markdown("### 📝 進度登錄")
 c1, c2, c3 = st.columns([1, 1, 2])
 work_date = c1.date_input("日期"); machine = c2.radio("機台", ["A車", "B車"], horizontal=True)
-mode = c3.radio("模式", ["4支一循環", "2支一循環"], horizontal=True); step = 4 if "4支" in mode else 2
+mode = c3.radio("模式", ["4支一循環", "2支一循環", "連續施作"], horizontal=True)
+step = 4 if "4支" in mode else (2 if "2支" in mode else 1)
 
 def save_data(piles):
     if not piles or sh_main is None: return

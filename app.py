@@ -16,7 +16,7 @@ except ImportError:
     MATPLOTLIB_READY = False
 
 st.set_page_config(page_title="CCP 進度管理系統 ", layout="wide")
-st.title("🏗️ CCP CCP進度管理系統 ")
+st.title("🏗️ CCP 進度管理系統 ")
 
 if 'sel_a' not in st.session_state:
     st.session_state.sel_a = []

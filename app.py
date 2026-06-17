@@ -259,8 +259,13 @@ with t2:
                 pts = re.split(r'[,\s]+', re.sub(r'[pP]', '', raw))
                 for pt in pts:
                     if '-' in pt:
-                        s_idx, e_idx = map(int, pt.split('-')); rs = step if s_idx <= e_idx else -step
-                        for n in range(s_idx, e_idx + (1 if s_idx <= e_idx else -1), rs): plist.append(f"P{n}")
+                        s_idx, e_idx = map(int, pt.split('-'))
+                        # 轉角跨越邏輯應用於手動輸入配合跳號
+                        if s_idx <= e_idx:
+                            seq_list = list(range(s_idx, e_idx + 1))
+                        else:
+                            seq_list = list(range(s_idx, 499 + 1)) + list(range(1, e_idx + 1))
+                        for n in seq_list[::step]: plist.append(f"P{n}")
                     elif pt.isdigit(): plist.append(f"P{pt}")
             process_and_save(plist)
 
@@ -289,8 +294,12 @@ def parse_range_to_piles(raw_str):
             if '-' in pt:
                 try:
                     s_idx, e_idx = map(int, pt.split('-'))
-                    rs = 1 if s_idx <= e_idx else -1
-                    for n in range(s_idx, e_idx + rs, rs): plist.append(f"P{n}")
+                    # 轉角跨越邏輯：若起點大於終點，自動從起點到499，再接1到終點
+                    if s_idx <= e_idx:
+                        for n in range(s_idx, e_idx + 1): plist.append(f"P{n}")
+                    else:
+                        for n in range(s_idx, 499 + 1): plist.append(f"P{n}")
+                        for n in range(1, e_idx + 1): plist.append(f"P{n}")
                 except: pass
             elif pt.isdigit(): plist.append(f"P{pt}")
     return list(dict.fromkeys(plist)) 
@@ -306,7 +315,7 @@ with c_btn1:
 
 with c_btn2:
     st.markdown("**👉 方式二：將【文字輸入】的範圍分配給**")
-    manual_raw = st.text_input("輸入樁號區間 (如: 175-210, 301)", label_visibility="collapsed")
+    manual_raw = st.text_input("輸入樁號區間 (如: 471-29, 301)", label_visibility="collapsed")
     cb3, cb4 = st.columns(2)
     if cb3.button("📌 A機 (輸入)"): st.session_state.sel_a = parse_range_to_piles(manual_raw); st.rerun()
     if cb4.button("📌 B機 (輸入)"): st.session_state.sel_b = parse_range_to_piles(manual_raw); st.rerun()
@@ -482,11 +491,11 @@ if not df_history.empty:
                 f"本週累積 A機:{this_week_done_a}支 B機:{this_week_done_b}支",
                 f"本日完成 A機:{today_done_auto_a}支 B機:{today_done_auto_b}支",
                 f"選取區 A機:{local_a_done}/{local_a_total}{a_pct_str}",
-                f"　　　 B機:{local_b_done}/{local_b_total}{b_pct_str}",
+                f"    B機:{local_b_done}/{local_b_total}{b_pct_str}",
                 f"總累積完成 {total_done_auto} 支 ({total_done_auto}/499, {total_perc:.2f}%)",
                 f"各別累積 A機:{cum_done_a}支 B機:{cum_done_b}支"
             ]
-            fig.text(0.05, pos_title_y, f"{today_roc} CCP施作進度回報", fontsize=50 * fig_scale, fontweight='bold')
+            fig.text(0.05, pos_title_y, f"{today_roc} 施作進度回報", fontsize=50 * fig_scale, fontweight='bold')
             fig.text(pos_info_x, pos_info_y, "\n".join(info_lines), fontsize=35 * fig_scale, linespacing=1.6, va='top')
             fig.text(pos_loc_x, pos_loc_y, st.session_state.pdf_loc_note_right, fontsize=55 * fig_scale, fontweight='bold', ha='center')
             fig.text(pos_loc_x_left, pos_loc_y_left, st.session_state.pdf_loc_note_left, fontsize=55 * fig_scale, fontweight='bold', ha='center')
